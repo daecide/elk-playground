@@ -1,0 +1,22 @@
+metricbeat.config.modules:
+  # path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
+
+processors:
+ - include_fields:
+     fields: ["system.cpu.cores", "system.cpu.idle.norm.pct", "system.cpu.idle.pct", "system.cpu.idle.ticks"]
+ - drop_fields:
+     fields: ["aerospike.namespace.name", "aerospike.namespace.node.host", "aerospike.namespace.node.name"]
+
+metricbeat.modules:
+- module: prometheus
+  period: 10s
+  hosts: ["prometheus:9090"]
+  metrics_path: /metrics
+
+output.elasticsearch:
+  hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
+
+setup:
+  kibana:
+    host: '${KIBANA_HOSTS:kibana:5601}'

@@ -1,0 +1,72 @@
+version: '3'
+
+networks:
+  elasticstack:
+
+services:
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+    tty: true
+    ports:
+      - "${ELASTICSEARCH_PORT}:9200"
+    environment:
+      - discovery.type=single-node
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    networks:
+      - elasticstack
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.2.0
+    tty: true
+    ports:
+      - "${KIBANA_PORT}:5601"
+    environment:
+      - SERVER_NAME=kibana
+      - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
+    networks:
+      - elasticstack
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.2.0
+    tty: true
+    ports:
+      - "${LOGSTASH_PORT}:9600"
+    networks:
+      - elasticstack
+    volumes:
+      - "./logstash/log:/usr/share/logstash/log"
+      - "./logstash/config:/usr/share/logstash/config"
+      - "./logstash/pipeline:/usr/share/logstash/pipeline"
+    environment:
+      - "LS_OPTS=--config.reload.automatic"
+  node1:
+    build: ./ubuntu-beats
+    tty: true
+    volumes:
+      - "$PWD/scripts/filebeat.yml:/etc/filebeat/filebeat.yml"
+      - "$PWD/scripts/heartbeat.yml:/etc/heartbeat/heartbeat.yml"
+      - "$PWD/scripts/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
+    networks:
+      - elasticstack
+  node2:
+    build: ./ubuntu-beats
+    tty: true
+    volumes:
+      - "$PWD/scripts/filebeat.yml:/etc/filebeat/filebeat.yml"
+      - "$PWD/scripts/heartbeat.yml:/etc/heartbeat/heartbeat.yml"
+      - "$PWD/scripts/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
+    networks:
+      - elasticstack
+  prometheus:
+    image: prom/prometheus
+    tty: true
+    ports:
+      - ${PROMETHEUS_PORT}:9090
+    networks:
+      - elasticstack
+  grafana:
+    image: grafana/grafana
+    tty: true
+    ports:
+      - ${GRAFANA_PORT}:3000
+    networks:
+      - elasticstack
+  
