@@ -1,18 +1,18 @@
 metricbeat.config.modules:
-  # path: ${path.config}/modules.d/*.yml
-  reload.enabled: false
-
-processors:
- - include_fields:
-     fields: ["system.cpu.cores", "system.cpu.idle.norm.pct", "system.cpu.idle.pct", "system.cpu.idle.ticks"]
- - drop_fields:
-     fields: ["aerospike.namespace.name", "aerospike.namespace.node.host", "aerospike.namespace.node.name"]
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: true
 
 metricbeat.modules:
-- module: prometheus
+- module: aerospike
+  enabled: false
+- module: system
+  metricsets: ["cpu","memory","network"]
+  enabled: true
   period: 10s
-  hosts: ["prometheus:9090"]
-  metrics_path: /metrics
+  processes: ['.*']
+
+processors:
+- include_fields.fields: []
 
 output.elasticsearch:
   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
@@ -20,3 +20,6 @@ output.elasticsearch:
 setup:
   kibana:
     host: '${KIBANA_HOSTS:kibana:5601}'
+  template:
+    name: 'custom_template'
+    fields: '/etc/metricbeat/fields.yml'

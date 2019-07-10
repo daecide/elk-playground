@@ -44,6 +44,8 @@ services:
       - "$PWD/scripts/filebeat.yml:/etc/filebeat/filebeat.yml"
       - "$PWD/scripts/heartbeat.yml:/etc/heartbeat/heartbeat.yml"
       - "$PWD/scripts/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
+      - "$PWD/scripts/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml"
+      - "$PWD/metricbeat/fields.yml:/etc/metricbeat/fields.yml"
     networks:
       - elasticstack
   node2:
@@ -53,20 +55,22 @@ services:
       - "$PWD/scripts/filebeat.yml:/etc/filebeat/filebeat.yml"
       - "$PWD/scripts/heartbeat.yml:/etc/heartbeat/heartbeat.yml"
       - "$PWD/scripts/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
+      - "$PWD/scripts/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml"
+      - "$PWD/metricbeat/fields.yml:/etc/metricbeat/fields.yml"
     networks:
       - elasticstack
-  prometheus:
-    image: prom/prometheus
-    tty: true
-    ports:
-      - ${PROMETHEUS_PORT}:9090
-    networks:
-      - elasticstack
-  grafana:
-    image: grafana/grafana
-    tty: true
-    ports:
-      - ${GRAFANA_PORT}:3000
-    networks:
-      - elasticstack
+  # prometheus:
+  #   image: prom/prometheus
+  #   tty: true
+  #   ports:
+  #     - ${PROMETHEUS_PORT}:9090
+  #   networks:
+  #     - elasticstack
+  # grafana:
+  #   image: grafana/grafana
+  #   tty: true
+  #   ports:
+  #     - ${GRAFANA_PORT}:3000
+  #   networks:
+  #     - elasticstack
   
