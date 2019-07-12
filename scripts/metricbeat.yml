@@ -3,16 +3,13 @@ metricbeat.config.modules:
   reload.enabled: true
 
 metricbeat.modules:
-- module: aerospike
-  enabled: false
+# - module: ecs
+#   enabled: true
+#   period: 10s
 - module: system
-  metricsets: ["cpu","memory","network"]
-  enabled: true
+  enabled: false
   period: 10s
   processes: ['.*']
-
-processors:
-- include_fields.fields: []
 
 output.elasticsearch:
   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
