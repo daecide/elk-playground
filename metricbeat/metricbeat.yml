@@ -1,9 +1,9 @@
 fields:
   tokopedia:
-    service:
-      name: 'content'
-      service:
-        name: 'feeds'
+    group: 'marketplace'
+    tribe: 'content'
+    service: 'feeds'
+    direct_dependencies: []
 
 metricbeat.config.modules:
   path: ${path.config}/modules.d/*.yml
