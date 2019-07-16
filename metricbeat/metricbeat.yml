@@ -1,15 +1,14 @@
+fields:
+  tokopedia:
+    service:
+      name: 'content'
+      service:
+        name: 'feeds'
+
 metricbeat.config.modules:
   path: ${path.config}/modules.d/*.yml
+  reload.period: 10s
   reload.enabled: true
-
-metricbeat.modules:
-# - module: ecs
-#   enabled: true
-#   period: 10s
-- module: system
-  enabled: false
-  period: 10s
-  processes: ['.*']
 
 output.elasticsearch:
   hosts: '${ELASTICSEARCH_HOSTS:elasticsearch:9200}'
@@ -17,6 +16,4 @@ output.elasticsearch:
 setup:
   kibana:
     host: '${KIBANA_HOSTS:kibana:5601}'
-  template:
-    name: 'custom_template'
-    fields: '/etc/metricbeat/fields.yml'
+  

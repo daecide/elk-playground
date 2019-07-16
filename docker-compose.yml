@@ -42,10 +42,9 @@ services:
     tty: true
     volumes:
       - "$PWD/scripts/filebeat.yml:/etc/filebeat/filebeat.yml"
-      - "$PWD/scripts/heartbeat.yml:/etc/heartbeat/heartbeat.yml"
-      - "$PWD/scripts/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
-      - "$PWD/scripts/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml"
-      - "$PWD/metricbeat/fields.yml:/etc/metricbeat/fields.yml"
+      - "$PWD/metricbeat/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
+      - "$PWD/metricbeat/fields.yml:/etc/metricbeat/custom-fields.yml"
+      - "$PWD/metricbeat/modules.d:/etc/metricbeat/modules.d"
     networks:
       - elasticstack
   node2:
@@ -53,10 +52,9 @@ services:
     tty: true
     volumes:
       - "$PWD/scripts/filebeat.yml:/etc/filebeat/filebeat.yml"
-      - "$PWD/scripts/heartbeat.yml:/etc/heartbeat/heartbeat.yml"
-      - "$PWD/scripts/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
-      - "$PWD/scripts/metricbeat.yml:/usr/share/metricbeat/metricbeat.yml"
-      - "$PWD/metricbeat/fields.yml:/etc/metricbeat/fields.yml"
+      - "$PWD/metricbeat/metricbeat.yml:/etc/metricbeat/metricbeat.yml"
+      - "$PWD/metricbeat/fields.yml:/etc/metricbeat/custom-fields.yml"
+      - "$PWD/metricbeat/modules.d:/etc/metricbeat/modules.d"
     networks:
       - elasticstack
   # prometheus:
